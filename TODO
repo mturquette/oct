@@ -1,0 +1,8 @@
+Change 'rate' to be writable.
+
+Create 'parent' entry, that can be read or be written to with a new parent clock
+name.
+
+Create 'clksel_parents' which can be read to see available parents.
+
+Create 'clksel_rates' which can be read to see available rates.

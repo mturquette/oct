@@ -1,0 +1,74 @@
+oct - the OMAP clock tool
+
+USAGE
+	Print clock rates with respect to a specific clock
+		oct [--version] [--directory[=DEBUGFS_PATH]]
+		[--output[=FILE_NAME]] [--format[=FORMAT_TYPE]]
+		[--delimiter[=DELIMITER_STRING]]
+		[--parent] [--help] CLOCK_NAME
+
+	Print clock rates from the whole clock tree
+		oct [--version] [--directory[=DEBUGFS_PATH]]
+		[--output[=FILE_NAME]] [--format[=FORMAT_TYPE]]
+		[--delimiter[=DELIMITER_STRING]]
+		[--help] --tree
+
+	Write a clock rate to a specific clock
+		oct [--version] [--directory[=DEBUGFS_PATH]]
+		    [--help] CLOCK_NAME CLOCK_RATE
+
+	Switch a clock's parent to a new clock
+		oct [--version] [--directory[=DEBUGFS_PATH]]
+		    [--help] CLOCK_NAME PARENT_NAME
+
+OPTIONS
+	If two arguments are specified to omap-clock-tool then all output
+	options are ignored.
+
+	-d --directory	debugfs directory, default is /debug
+	-h --help	print explanation of options and usage
+	-o --output	output file, default is STDOUT
+	-t --tree	print the whole clock tree
+	-f --format	output in specific format.  Accepted formats are,
+		=xml	XML format
+		=dot	Graphiz DOT format
+		=pair	clock name and clock speed separated by delimiter
+	-l --delimiter	delimiter to use for 'pair' format, default is tab
+	-p --parent	print data for the specified clock and it's parents
+	-v --version	print version, copyright and author info
+
+DESCRIPTION
+	oct works by parsing the OMAP clock tree in debugfs via a depth-first
+	search.  Once it finds the clock specified in the first argument then
+	it will print the relevant clock rate information, or oct will set the
+	new rate for that clock if a rate was specified.
+	
+	Depending on other options it is also possible to print the rates for
+	all of the parent clocks up until the root clock, or even to print
+	rate data for every clock in the system with the --tree option.
+
+	By specifying two clock names and no rates oct can also be used to
+	switch the parent clock of a specified clock.
+	
+	Any time that kernel operations fail will result in oct returning the
+	value of the last debugfs operation.  If clock names are invalid oct
+	will return -ENOENT. If parent/child clocks are not compatible then
+	oct will return -EINVAL.  If the clock rate is not writeable oct will
+	return -EPERM.  All failures result in verbose error messages sent to
+	STDERR.
+
+NOTES
+	oct was only written with OMAP systems in mind.  Use on any processor
+	other than an OMAP processor is pointless.  In fact oct might beat you
+	up, steal your lover and render your device useless.
+
+	oct was originally written in parallel to a Linux kernel patch
+	enabling writable clock rates in debugfs for OMAP.  Without this patch
+	your OMAP system will not be able to change clock rates and all
+	operations will result in -EPERM return codes.
+	
+	Kernels prior to 2.6.26 will need to backport this patch.  It can be
+	found at http://blahblahblah
+
+AUTHORS
+	Originally written by Mike Turquette for Texas Instruments, Inc.
