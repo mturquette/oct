@@ -1,7 +1,7 @@
 all: oct
 
-oct:
-	gcc -o oct main.c
+oct: main.c
+	${CROSS_COMPILE}gcc -static -o oct main.c
 
 .PHONY:
 	clean
